@@ -1,0 +1,2302 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solune Project</title>
+
+  <style>
+    :root {
+      --bg: #040913;
+      --bg-2: #071527;
+      --card: rgba(10, 23, 42, 0.70);
+      --card-strong: rgba(12, 26, 47, 0.86);
+      --text: #f7fbff;
+      --muted: #c1cbd9;
+      --muted-soft: #9eabc0;
+      --line: rgba(165, 190, 230, 0.16);
+      --line-strong: rgba(165, 190, 230, 0.23);
+      --blue: #246fd4;
+      --blue-2: #2f7fe6;
+      --blue-3: #1b57ac;
+      --violet: #5f52d9;
+      --danger: #ff7d7d;
+      --success: #5be0a1;
+      --warning: #ffd36e;
+      --shadow: 0 28px 78px rgba(0, 0, 0, 0.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    html {
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+
+    body {
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 25%, rgba(36, 111, 212, 0.22), transparent 330px),
+        radial-gradient(circle at 78% 18%, rgba(95, 82, 217, 0.16), transparent 360px),
+        radial-gradient(circle at 54% 92%, rgba(37, 116, 198, 0.10), transparent 380px),
+        linear-gradient(135deg, #040913 0%, #071527 52%, #030711 100%);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.017) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.017) 1px, transparent 1px);
+      background-size: 54px 54px;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 36px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 30px 0 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      gap: 12px;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 52px;
+      height: 34px;
+      padding-right: 5px;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 850;
+      font-style: italic;
+      letter-spacing: -0.07em;
+      background: linear-gradient(135deg, #5fb4ff 0%, #2f7fe6 48%, #5f52d9 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 10px 20px rgba(47, 127, 230, 0.30));
+      user-select: none;
+    }
+
+    .brand-text {
+      font-size: 14px;
+      font-weight: 720;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    .nav-actions,
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      font-size: 14px;
+      font-weight: 650;
+      background: transparent;
+      transition: opacity 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      opacity: 0.92;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-2), var(--blue-3));
+      border-color: rgba(87, 150, 230, 0.28);
+      box-shadow: 0 16px 34px rgba(31, 93, 180, 0.26);
+    }
+
+    .btn-soft {
+      background: rgba(255, 255, 255, 0.055);
+      border-color: var(--line);
+    }
+
+    .btn-danger {
+      background: rgba(255, 125, 125, 0.11);
+      border-color: rgba(255, 125, 125, 0.24);
+      color: #ffd8d8;
+    }
+
+    .btn-wide {
+      width: 100%;
+    }
+
+    .hero {
+      min-height: calc(100vh - 92px);
+      display: grid;
+      grid-template-columns: minmax(430px, 1fr) minmax(450px, 540px);
+      gap: clamp(36px, 6vw, 76px);
+      align-items: center;
+      padding-top: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 610px;
+      color: #fff;
+      font-size: clamp(42px, 4.7vw, 66px);
+      line-height: 1.03;
+      letter-spacing: -0.055em;
+      font-weight: 760;
+    }
+
+    .accent {
+      background: linear-gradient(135deg, #3b88ec, #5f52d9);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      white-space: nowrap;
+      text-shadow: none;
+    }
+
+    .lead {
+      margin: 23px 0 0;
+      max-width: 470px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .actions {
+      margin-top: 30px;
+    }
+
+    .access {
+      width: min(360px, 100%);
+      margin-top: 38px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 10% 18%, rgba(47, 127, 230, 0.20), transparent 115px),
+        rgba(10, 23, 42, 0.66);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .access-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .lock {
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 67% 22%, rgba(100, 175, 255, 0.38), transparent 34%),
+        linear-gradient(135deg, rgba(47, 127, 230, 0.26), rgba(95, 82, 217, 0.18));
+      border: 1px solid rgba(126, 175, 240, 0.28);
+    }
+
+    .lock svg {
+      width: 23px;
+      height: 23px;
+      stroke: #e2f1ff;
+    }
+
+    .access strong {
+      display: block;
+      margin: 4px 0 6px;
+      font-size: 15px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .access p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .access-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 17px;
+    }
+
+    .panel {
+      min-height: 445px;
+      padding: 25px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 90% 12%, rgba(95, 82, 217, 0.14), transparent 160px),
+        radial-gradient(circle at 8% 94%, rgba(47, 127, 230, 0.08), transparent 145px),
+        linear-gradient(135deg, rgba(14, 29, 52, 0.84), rgba(8, 18, 32, 0.88));
+      backdrop-filter: blur(24px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 23px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+      color: #fff;
+    }
+
+    .sub {
+      margin: 8px 0 0;
+      color: #bac8da;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .uid-pill {
+      display: none !important;
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(87, 150, 230, 0.26);
+      background: rgba(47, 127, 230, 0.11);
+      color: #d4e9ff;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .uid-pill.active {
+      display: inline-flex;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      color: #edf6ff;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    input {
+      height: 46px;
+      border: 1px solid rgba(165, 190, 230, 0.16);
+      border-radius: 14px;
+      background: rgba(3, 10, 18, 0.58);
+      color: white;
+      padding: 0 14px;
+      outline: 0;
+      font-size: 14px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    input:focus {
+      border-color: rgba(47, 127, 230, 0.68);
+      box-shadow: 0 0 0 4px rgba(47, 127, 230, 0.10);
+      background: rgba(3, 10, 18, 0.72);
+    }
+
+    .switch {
+      text-align: center;
+      color: #bac8da;
+      font-size: 13px;
+      margin: 15px 0 0;
+    }
+
+    .switch button {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #79bfff;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .message {
+      display: none;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: #ffd8d8;
+      background: rgba(255, 125, 125, 0.10);
+      border: 1px solid rgba(255, 125, 125, 0.18);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.good {
+      color: #d8ffe9;
+      background: rgba(91, 224, 161, 0.10);
+      border-color: rgba(91, 224, 161, 0.18);
+    }
+
+    .promo-view.active {
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+    }
+
+    .profile-mini {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 13px;
+      align-items: center;
+      padding: 13px;
+      margin-bottom: 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(165, 190, 230, 0.12);
+      background: rgba(255, 255, 255, 0.032);
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 70% 20%, rgba(100, 175, 255, 0.65), transparent 36%),
+        linear-gradient(135deg, #164b8a, #2f7fe6);
+      box-shadow: 0 14px 28px rgba(47, 127, 230, 0.18);
+    }
+
+    .user-icon {
+      width: 25px;
+      height: 25px;
+      stroke: #eef7ff;
+      filter: drop-shadow(0 0 10px rgba(238, 247, 255, 0.28));
+    }
+
+    .diamond {
+      display: none;
+    }
+
+    .profile-mini strong {
+      display: block;
+      margin-bottom: 3px;
+      color: #ffffff;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
+    .profile-mini span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .access-status,
+    .product-box,
+    .admin-block {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 13px;
+      padding: 13px;
+      border-radius: 16px;
+      border: 1px solid rgba(165, 190, 230, 0.12);
+      background:
+        radial-gradient(circle at 92% 8%, rgba(47, 127, 230, 0.11), transparent 90px),
+        rgba(255, 255, 255, 0.032);
+    }
+
+    .status-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .status-title,
+    .admin-title {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .status-badge {
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(165, 190, 230, 0.14);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .status-badge.active {
+      color: #d8ffe9;
+      border-color: rgba(91, 224, 161, 0.20);
+      background: rgba(91, 224, 161, 0.08);
+    }
+
+    .status-badge.warn {
+      color: #ffe9ae;
+      border-color: rgba(255, 211, 110, 0.22);
+      background: rgba(255, 211, 110, 0.08);
+    }
+
+    .usage {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .bar {
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.065);
+      border: 1px solid rgba(165, 190, 230, 0.10);
+    }
+
+    .bar-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--blue-2), var(--violet));
+      transition: width 0.18s ease;
+    }
+
+    .product-row,
+    .admin-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 9px;
+    }
+
+    .product-row input,
+    .product-row .btn,
+    .admin-row input,
+    .admin-row .btn {
+      height: 42px;
+    }
+
+    .product-help,
+    .admin-help {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .code-stage {
+      height: 154px;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      margin-bottom: 13px;
+      border-radius: 17px;
+      border: 1px solid rgba(165, 190, 230, 0.16);
+      background:
+        radial-gradient(circle at 84% 14%, rgba(47, 127, 230, 0.26), transparent 130px),
+        radial-gradient(circle at 14% 88%, rgba(95, 82, 217, 0.10), transparent 110px),
+        rgba(3, 10, 18, 0.60);
+      overflow: hidden;
+    }
+
+    .code {
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      word-break: break-all;
+      font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+      font-size: clamp(24px, 3vw, 34px);
+      letter-spacing: 0.055em;
+      font-weight: 500;
+      color: #fff;
+      text-shadow: 0 0 24px rgba(47, 127, 230, 0.34);
+    }
+
+    .code.empty {
+      opacity: 1;
+      color: var(--muted-soft);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+      text-shadow: none;
+    }
+
+    .code.spinning {
+      animation: codePulse 0.55s ease;
+    }
+
+    @keyframes codePulse {
+      0% { opacity: 0.25; filter: blur(2px); transform: scale(0.98); }
+      100% { opacity: 1; filter: blur(0); transform: scale(1); }
+    }
+
+    .promo-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .profile-list,
+    .admin-list {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .profile-row,
+    .admin-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 11px;
+      border-radius: 12px;
+      border: 1px solid rgba(165, 190, 230, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .profile-row b,
+    .admin-item b {
+      color: #ffffff;
+      text-align: right;
+      word-break: break-word;
+      font-weight: 500;
+    }
+
+    .admin-view.active {
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+    }
+
+    .admin-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 13px;
+    }
+
+    .admin-scroll {
+      max-height: 260px;
+      overflow: auto;
+      display: grid;
+      gap: 8px;
+      padding-right: 2px;
+    }
+
+    .admin-item {
+      align-items: flex-start;
+    }
+
+    .admin-item-main {
+      display: grid;
+      gap: 3px;
+    }
+
+    .admin-item-main span {
+      color: var(--muted);
+    }
+
+    .admin-actions-small {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .mini-btn {
+      min-height: 30px;
+      height: 30px;
+      border-radius: 9px;
+      border: 1px solid rgba(165, 190, 230, 0.14);
+      padding: 0 9px;
+      background: rgba(255,255,255,.045);
+      color: #fff;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .mini-btn.danger {
+      color: #ffd8d8;
+      border-color: rgba(255,125,125,.22);
+      background: rgba(255,125,125,.08);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 80;
+      transform: translateX(-50%);
+      opacity: 0;
+      pointer-events: none;
+      padding: 11px 15px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--blue-2), var(--blue-3));
+      color: #fff;
+      box-shadow: 0 16px 38px rgba(47, 127, 230, 0.28);
+      font-size: 12px;
+      font-weight: 600;
+      transition: opacity 0.18s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+
+    body.app-mode .hero {
+      min-height: calc(100vh - 92px);
+      grid-template-columns: 1fr;
+      align-items: start;
+      padding-top: 64px;
+    }
+
+    body.app-mode .hero > section:first-child {
+      display: none;
+    }
+
+    body.app-mode .panel {
+      width: 100%;
+      max-width: none;
+      min-height: auto;
+    }
+
+    body.app-mode .promo-view.active {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.86fr) minmax(420px, 1.14fr);
+      gap: 16px;
+      align-items: start;
+      min-height: 0;
+    }
+
+    body.app-mode .promo-view .profile-mini {
+      grid-column: 1;
+      grid-row: 1;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .promo-view .access-status {
+      grid-column: 1;
+      grid-row: 2;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .promo-view .product-box {
+      grid-column: 1;
+      grid-row: 3;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .promo-view .profile-list {
+      grid-column: 1;
+      grid-row: 4;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .promo-view .code-stage {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      height: 292px;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .promo-view .promo-actions {
+      grid-column: 2;
+      grid-row: 4;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .promo-view > a.btn {
+      grid-column: 2;
+    }
+
+    body.app-mode .promo-view > #logoutBtn {
+      grid-column: 2;
+    }
+
+    body.app-mode .admin-view.active {
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) minmax(460px, 1fr);
+      gap: 16px;
+      align-items: start;
+      min-height: 0;
+    }
+
+    body.app-mode .admin-view .access-status {
+      grid-column: 1;
+      grid-row: 1;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .admin-view .admin-block {
+      grid-column: 1;
+      grid-row: 2;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .admin-view .admin-tabs {
+      grid-column: 1;
+      grid-row: 3;
+      margin-bottom: 0;
+    }
+
+    body.app-mode .admin-view #adminLogoutBtn {
+      grid-column: 1;
+      grid-row: 4;
+    }
+
+    body.app-mode .admin-view #adminList {
+      grid-column: 2;
+      grid-row: 1 / span 4;
+      max-height: 620px;
+      min-height: 360px;
+    }
+
+    .admin-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .admin-item-main {
+      text-align: left;
+      justify-items: start;
+      min-width: 0;
+    }
+
+    .admin-actions-small {
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .admin-actions-small .mini-btn {
+      white-space: nowrap;
+    }
+
+
+    body.app-mode .page {
+      width: min(1220px, calc(100% - 42px));
+    }
+
+    body.app-mode .hero {
+      padding-top: 48px;
+      align-items: center;
+    }
+
+    body.app-mode .panel {
+      padding: 24px;
+    }
+
+    body.app-mode .promo-view.active {
+      grid-template-columns: minmax(360px, 0.82fr) minmax(440px, 1.18fr);
+      gap: 14px;
+    }
+
+    body.app-mode .promo-view .code-stage {
+      height: 220px;
+      grid-row: 1 / span 2;
+    }
+
+    body.app-mode .promo-view .promo-actions {
+      grid-row: 3;
+    }
+
+    body.app-mode .promo-view > a.btn {
+      grid-row: 4;
+      margin-top: 0;
+    }
+
+    body.app-mode .promo-view > #logoutBtn {
+      grid-row: 5;
+      margin-top: 0;
+    }
+
+    body.app-mode .profile-mini,
+    body.app-mode .access-status,
+    body.app-mode .product-box,
+    body.app-mode .profile-list,
+    body.app-mode .code-stage,
+    body.app-mode .promo-actions {
+      margin-bottom: 0;
+    }
+
+    body.app-mode .profile-list {
+      gap: 7px;
+    }
+
+    body.app-mode .product-box {
+      padding: 12px;
+    }
+
+    body.app-mode .access-status {
+      padding: 12px;
+    }
+
+    body.app-mode .profile-mini {
+      padding: 12px;
+    }
+
+    body.app-mode .code {
+      max-width: 100%;
+    }
+
+
+    body.app-mode .hero {
+      min-height: calc(100vh - 92px);
+      grid-template-columns: 1fr;
+      align-items: start;
+      padding-top: 54px;
+    }
+
+    body.app-mode .hero > section:first-child {
+      display: none;
+    }
+
+    body.app-mode .panel {
+      width: min(1080px, 100%);
+      max-width: none;
+      min-height: auto;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    body.app-mode .promo-view.active {
+      display: grid;
+      grid-template-columns: minmax(340px, 0.86fr) minmax(440px, 1.14fr);
+      grid-template-areas:
+        "profile code"
+        "status code"
+        "product actions"
+        "details telegram";
+      gap: 14px;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    body.app-mode .promo-view .profile-mini {
+      grid-area: profile;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .access-status {
+      grid-area: status;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .product-box {
+      grid-area: product;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .profile-list {
+      grid-area: details;
+      margin: 0;
+      align-self: start;
+    }
+
+    body.app-mode .promo-view .code-stage {
+      grid-area: code;
+      height: 100%;
+      min-height: 258px;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .promo-actions {
+      grid-area: actions;
+      margin: 0;
+      align-self: start;
+    }
+
+    body.app-mode .promo-view > a.btn {
+      grid-area: telegram;
+      margin: 0;
+      align-self: start;
+    }
+
+    body.app-mode .code.empty {
+      font-size: 17px;
+    }
+
+    body.app-mode .admin-view.active {
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) minmax(460px, 1fr);
+      grid-template-areas:
+        "status list"
+        "create list"
+        "tabs list";
+      gap: 16px;
+      align-items: start;
+      min-height: 0;
+    }
+
+    body.app-mode .admin-view .access-status {
+      grid-area: status;
+      margin: 0;
+    }
+
+    body.app-mode .admin-view .admin-block {
+      grid-area: create;
+      margin: 0;
+    }
+
+    body.app-mode .admin-view .admin-tabs {
+      grid-area: tabs;
+      margin: 0;
+    }
+
+    body.app-mode .admin-view #adminList {
+      grid-area: list;
+      max-height: 620px;
+      min-height: 360px;
+    }
+
+    .admin-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .admin-item-main {
+      text-align: left;
+      justify-items: start;
+      min-width: 0;
+    }
+
+    .admin-actions-small {
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .admin-actions-small .mini-btn {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding-top: 56px;
+      }
+
+      .panel {
+        max-width: 620px;
+      }
+
+      body.app-mode .panel {
+        max-width: none;
+      }
+
+      body.app-mode .promo-view.active,
+      body.app-mode .admin-view.active {
+        grid-template-columns: 1fr;
+      }
+
+      body.app-mode .promo-view .profile-mini,
+      body.app-mode .promo-view .access-status,
+      body.app-mode .promo-view .product-box,
+      body.app-mode .promo-view .profile-list,
+      body.app-mode .promo-view .code-stage,
+      body.app-mode .promo-view .promo-actions,
+      body.app-mode .promo-view > a.btn,
+      body.app-mode .promo-view > #logoutBtn,
+      body.app-mode .admin-view .access-status,
+      body.app-mode .admin-view .admin-block,
+      body.app-mode .admin-view .admin-tabs,
+      body.app-mode .admin-view #adminList,
+      body.app-mode .admin-view #adminLogoutBtn {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      body.app-mode .admin-view #adminList {
+        max-height: none;
+        min-height: 0;
+      }
+
+      body.app-mode .promo-view.active {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "profile"
+          "status"
+          "product"
+          "code"
+          "actions"
+          "details"
+          "telegram";
+      }
+
+      body.app-mode .promo-view .profile-mini,
+      body.app-mode .promo-view .access-status,
+      body.app-mode .promo-view .product-box,
+      body.app-mode .promo-view .profile-list,
+      body.app-mode .promo-view .code-stage,
+      body.app-mode .promo-view .promo-actions,
+      body.app-mode .promo-view > a.btn {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      body.app-mode .promo-view .code-stage {
+        min-height: 180px;
+      }
+
+      body.app-mode .admin-view.active {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "status"
+          "create"
+          "tabs"
+          "list";
+      }
+
+      body.app-mode .admin-view .access-status,
+      body.app-mode .admin-view .admin-block,
+      body.app-mode .admin-view .admin-tabs,
+      body.app-mode .admin-view #adminList {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      body.app-mode .admin-view #adminList {
+        max-height: none;
+        min-height: 0;
+      }
+
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 20px, 1120px);
+        padding-top: 20px;
+      }
+
+      .nav {
+        align-items: flex-start;
+      }
+
+      .brand-text {
+        font-size: 13px;
+      }
+
+      .logo {
+        min-width: 48px;
+        font-size: 28px;
+      }
+
+      .nav-actions {
+        gap: 7px;
+      }
+
+      .btn {
+        padding: 0 13px;
+      }
+
+      h1 {
+        font-size: clamp(36px, 10.8vw, 52px);
+      }
+
+      .actions,
+      .promo-actions,
+      .product-row,
+      .admin-row,
+      .admin-tabs {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .access {
+        width: 100%;
+      }
+
+      .access-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 19px;
+      }
+
+      .panel-head {
+        flex-direction: column;
+      }
+
+      .status-top,
+      .usage {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-item {
+        display: grid;
+      }
+
+      .admin-actions-small {
+        justify-content: flex-start;
+      }
+    }
+  
+    /* Final structured dashboard layout */
+    body.app-mode .page {
+      width: min(1180px, calc(100% - 42px));
+    }
+
+    body.app-mode .hero {
+      min-height: calc(100vh - 92px);
+      grid-template-columns: 1fr;
+      align-items: start;
+      padding-top: 52px;
+    }
+
+    body.app-mode .hero > section:first-child {
+      display: none;
+    }
+
+    body.app-mode .panel {
+      width: min(1040px, 100%);
+      max-width: none;
+      min-height: auto;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    body.app-mode .promo-view.active {
+      display: grid;
+      grid-template-columns: minmax(360px, 0.82fr) minmax(440px, 1.18fr);
+      grid-template-areas:
+        "profile code"
+        "status code"
+        "product code"
+        "details actions";
+      gap: 14px;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    body.app-mode .promo-view .profile-mini {
+      grid-area: profile;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .access-status {
+      grid-area: status;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .product-box {
+      grid-area: product;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .profile-list {
+      grid-area: details;
+      margin: 0;
+      align-self: start;
+    }
+
+    body.app-mode .promo-view .code-stage {
+      grid-area: code;
+      height: auto;
+      min-height: 262px;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .promo-actions {
+      grid-area: actions;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.8fr;
+      gap: 9px;
+      align-self: start;
+    }
+
+    body.app-mode .profile-mini,
+    body.app-mode .access-status,
+    body.app-mode .product-box,
+    body.app-mode .profile-list,
+    body.app-mode .code-stage,
+    body.app-mode .promo-actions {
+      margin-bottom: 0;
+    }
+
+    body.app-mode .product-box,
+    body.app-mode .access-status,
+    body.app-mode .profile-mini {
+      padding: 12px;
+    }
+
+    body.app-mode .product-row {
+      grid-template-columns: 1fr 148px;
+    }
+
+    body.app-mode .profile-list {
+      gap: 7px;
+    }
+
+    body.app-mode .code.empty {
+      font-size: 17px;
+    }
+
+    body.app-mode .admin-view.active {
+      display: grid;
+      grid-template-columns: minmax(280px, 350px) minmax(460px, 1fr);
+      grid-template-areas:
+        "status list"
+        "create list"
+        "tabs list";
+      gap: 16px;
+      align-items: start;
+      min-height: 0;
+    }
+
+    body.app-mode .admin-view .access-status {
+      grid-area: status;
+      margin: 0;
+    }
+
+    body.app-mode .admin-view .admin-block {
+      grid-area: create;
+      margin: 0;
+    }
+
+    body.app-mode .admin-view .admin-tabs {
+      grid-area: tabs;
+      margin: 0;
+    }
+
+    body.app-mode .admin-view #adminList {
+      grid-area: list;
+      max-height: 620px;
+      min-height: 360px;
+    }
+
+    .admin-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .admin-item-main {
+      text-align: left;
+      justify-items: start;
+      min-width: 0;
+    }
+
+    .admin-actions-small {
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .admin-actions-small .mini-btn {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 980px) {
+      body.app-mode .promo-view.active {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "profile"
+          "status"
+          "product"
+          "code"
+          "actions"
+          "details";
+      }
+
+      body.app-mode .promo-view .code-stage {
+        min-height: 190px;
+      }
+
+      body.app-mode .promo-view .promo-actions {
+        grid-template-columns: 1fr;
+      }
+
+      body.app-mode .product-row {
+        grid-template-columns: 1fr;
+      }
+
+      body.app-mode .admin-view.active {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "status"
+          "create"
+          "tabs"
+          "list";
+      }
+
+      body.app-mode .admin-view #adminList {
+        max-height: none;
+        min-height: 0;
+      }
+    }
+
+  
+    #guestActions {
+      display: none !important;
+      margin-top: 0 !important;
+    }
+
+    .config-note {
+      display: none;
+      margin-bottom: 13px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 211, 110, 0.22);
+      background: rgba(255, 211, 110, 0.08);
+      color: #ffe9ae;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .config-note.show {
+      display: block;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header class="nav">
+      <a class="brand" href="#" aria-label="SOLUNE PROJECT">
+        <span class="logo">SP</span>
+        <span class="brand-text">SOLUNE PROJECT</span>
+      </a>
+
+      <div class="nav-actions" id="navActions">
+        <button class="btn btn-soft" id="navLoginBtn" type="button">Войти</button>
+        <button class="btn btn-primary" id="navRegisterBtn" type="button">Регистрация</button>
+      </div>
+    </header>
+
+    <main class="hero">
+      <section>
+        <h1>Подбор промокодов для <span class="accent">STANDOFF&nbsp;2</span></h1>
+        <p class="lead">Тот самый подбор промокодов для игры. Наслаждайтесь.</p>
+
+        <div class="actions" id="guestActions" aria-hidden="true"></div>
+
+<div class="access" id="accessCard">
+          <div class="access-row">
+            <div class="lock" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5.5" y="10" width="13" height="10" rx="2.3"></rect>
+                <path d="M8.5 10V7.6C8.5 5.5 10 4 12 4s3.5 1.5 3.5 3.6V10"></path>
+                <path d="M12 14.2v2"></path>
+              </svg>
+            </div>
+            <div>
+              <strong>Доступ после покупки</strong>
+              <p>Приобретите товар через Telegram, чтобы пользоваться подбором.</p>
+            </div>
+          </div>
+
+          <div class="access-buttons">
+            <button class="btn btn-primary" id="accessLoginBtn" type="button">Войти</button>
+            <a class="btn btn-soft" href="https://t.me/solunedev" target="_blank" rel="noopener">Telegram</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 id="panelTitle">Регистрация</h2>
+            <p class="sub" id="panelSubtitle">Создайте аккаунт для доступа к подбору.</p>
+          </div>
+          <div class="uid-pill" id="uidPill">UID-0001</div>
+        </div>
+
+        <div class="config-note" id="configNote">
+          Подключите Supabase URL и anon key в файле index.html, чтобы база данных заработала.
+        </div>
+
+        <div class="view active" id="registerView">
+          <form class="form" id="registerForm" novalidate>
+            <label>
+              Ник
+              <input id="regNick" type="text" minlength="3" maxlength="24" autocomplete="username" required>
+            </label>
+
+            <label>
+              Telegram username
+              <input id="regTg" type="text" minlength="3" maxlength="32" autocomplete="off" required>
+            </label>
+
+            <label>
+              Standoff ID
+              <input id="regStandoff" type="text" inputmode="numeric" autocomplete="off" required>
+            </label>
+
+            <label>
+              Пароль
+              <input id="regPassword" type="password" minlength="6" autocomplete="new-password" required>
+            </label>
+
+            <div class="message" id="registerMessage"></div>
+
+            <button class="btn btn-primary btn-wide" type="submit">Зарегистрироваться</button>
+          </form>
+
+          <p class="switch">Уже есть аккаунт? <button type="button" id="switchToLogin">Войти</button></p>
+        </div>
+
+        <div class="view" id="loginView">
+          <form class="form" id="loginForm">
+            <label>
+              Ник или Telegram username
+              <input id="loginName" type="text" autocomplete="username" required>
+            </label>
+
+            <label>
+              Пароль
+              <input id="loginPassword" type="password" autocomplete="current-password" required>
+            </label>
+
+            <div class="message" id="loginMessage"></div>
+
+            <button class="btn btn-primary btn-wide" type="submit">Войти</button>
+          </form>
+
+          <p class="switch">Нет аккаунта? <button type="button" id="switchToRegister">Зарегистрироваться</button></p>
+        </div>
+
+        <div class="view promo-view" id="promoView">
+          <div class="profile-mini">
+            <div class="avatar" aria-hidden="true">
+              <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21a8 8 0 0 0-16 0"></path>
+                <circle cx="12" cy="8" r="4"></circle>
+              </svg>
+            </div>
+            <div>
+              <strong id="profileNick">Ник</strong>
+              <span id="profileUid">UID-0001</span>
+            </div>
+          </div>
+
+          <div class="access-status">
+            <div class="status-top">
+              <span class="status-title">Статус доступа</span>
+              <span class="status-badge" id="accessBadge">Не активирован</span>
+            </div>
+
+            <div class="usage">
+              <span id="usesText">Доступно подборов: 0 / 5</span>
+              <span id="cooldownText"></span>
+            </div>
+
+            <div class="bar" aria-hidden="true">
+              <div class="bar-fill" id="barFill"></div>
+            </div>
+          </div>
+
+          <div class="product-box">
+            <label>
+              Код продукта
+              <div class="product-row">
+                <input id="productCodeInput" type="text" autocomplete="off">
+                <button class="btn btn-primary" id="activateProductBtn" type="button">Активировать</button>
+              </div>
+            </label>
+            <p class="product-help" id="productHelp">Введите код продукта.</p>
+          </div>
+
+          <div class="code-stage">
+            <div class="code empty" id="promoCode">Тут появится промокод...</div>
+          </div>
+
+          <div class="promo-actions">
+            <button class="btn btn-primary" id="pickBtn" type="button">Подобрать</button>
+            <button class="btn btn-soft" id="copyBtn" type="button">Скопировать</button>
+            <a class="btn btn-soft" href="https://t.me/solunedev" target="_blank" rel="noopener">Telegram</a>
+          </div>
+
+          <div class="profile-list">
+            <div class="profile-row">
+              <span>Telegram</span>
+              <b id="profileTg">—</b>
+            </div>
+            <div class="profile-row">
+              <span>Standoff ID</span>
+              <b id="profileStandoff">—</b>
+            </div>
+            <div class="profile-row">
+              <span>UID-пользователя</span>
+              <b id="profileUidFull">—</b>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="view admin-view" id="adminView">
+          <div class="access-status">
+            <div class="status-top">
+              <span class="status-title">Админ-панель</span>
+              <span class="status-badge active" id="adminStats">0 пользователей</span>
+            </div>
+            <p class="product-help">Управление пользователями и кодами продукта.</p>
+          </div>
+
+          <div class="admin-block">
+            <span class="admin-title">Создать код продукта</span>
+            <div class="admin-row">
+              <input id="adminCodeInput" type="text" autocomplete="off">
+              <button class="btn btn-primary" id="adminCreateCodeBtn" type="button">Создать</button>
+            </div>
+            <p class="admin-help">Пустое поле — сайт сгенерирует код автоматически.</p>
+          </div>
+
+          <div class="admin-tabs">
+            <button class="btn btn-primary" id="showUsersBtn" type="button">Пользователи</button>
+            <button class="btn btn-soft" id="showCodesBtn" type="button">Коды</button>
+          </div>
+
+          <div class="admin-scroll" id="adminList"></div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">Готово</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://eyfhfjwykaqzkpzhgscs.supabase.co/rest/v1/";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5Zmhmand5a2Fxemtwemhnc2NzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTc3OTAsImV4cCI6MjA5NTk5Mzc5MH0.61GwO-grbwknsWlhFpxLtZ_C1tZonWwwKA-53GravPo";
+
+    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const DAILY_LIMIT = 5;
+    const TG_URL = "https://t.me/solunedev";
+
+    const $ = (selector) => document.querySelector(selector);
+
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const navActions = $("#navActions");
+    const guestActions = $("#guestActions");
+    const accessCard = $("#accessCard");
+
+    const panelTitle = $("#panelTitle");
+    const panelSubtitle = $("#panelSubtitle");
+    const uidPill = $("#uidPill");
+    const configNote = $("#configNote");
+
+    const registerView = $("#registerView");
+    const loginView = $("#loginView");
+    const promoView = $("#promoView");
+    const adminView = $("#adminView");
+
+    const registerForm = $("#registerForm");
+    const loginForm = $("#loginForm");
+    const registerMessage = $("#registerMessage");
+    const loginMessage = $("#loginMessage");
+    const regStandoff = $("#regStandoff");
+
+    const promoCodeEl = $("#promoCode");
+    const toastEl = $("#toast");
+
+    const accessBadge = $("#accessBadge");
+    const usesText = $("#usesText");
+    const cooldownText = $("#cooldownText");
+    const barFill = $("#barFill");
+    const productCodeInput = $("#productCodeInput");
+    const productHelp = $("#productHelp");
+
+    const adminList = $("#adminList");
+    const adminStats = $("#adminStats");
+    const adminCodeInput = $("#adminCodeInput");
+
+    let currentProfile = null;
+    let adminMode = "users";
+
+    function isConfigured() {
+      return !SUPABASE_URL.includes("ВСТАВЬ") && !SUPABASE_ANON_KEY.includes("ВСТАВЬ");
+    }
+
+    function safeOn(selector, event, handler) {
+      const el = $(selector);
+      if (el) el.addEventListener(event, handler);
+    }
+
+    function normalizeTg(value) {
+      const trimmed = value.trim().replace(/\s+/g, "");
+      return trimmed.startsWith("@") ? trimmed : "@" + trimmed;
+    }
+
+    function normalizeLogin(value) {
+      return value.trim().toLowerCase();
+    }
+
+    function normalizeProductCode(value) {
+      return value.trim().replace(/\s+/g, "").toUpperCase();
+    }
+
+    function formatUidNum(value) {
+      return String(value || 1).padStart(4, "0");
+    }
+
+    function formatUid(profile) {
+      return "UID-" + formatUidNum(profile.uid_num);
+    }
+
+    function makeAuthEmail() {
+      if (crypto.randomUUID) {
+        return "u-" + crypto.randomUUID() + "@solune.local";
+      }
+
+      return "u-" + Date.now() + "-" + Math.random().toString(36).slice(2) + "@solune.local";
+    }
+
+    function showToast(text) {
+      toastEl.textContent = text;
+      toastEl.classList.add("show");
+      setTimeout(() => toastEl.classList.remove("show"), 1700);
+    }
+
+    function showMessage(element, text, type = "bad") {
+      element.className = type === "good" ? "message show good" : "message show";
+      element.textContent = text;
+    }
+
+    function clearMessages() {
+      registerMessage.className = "message";
+      registerMessage.textContent = "";
+      loginMessage.className = "message";
+      loginMessage.textContent = "";
+    }
+
+    function formatCooldown(value) {
+      if (!value) return "";
+      const end = new Date(value).getTime();
+      const ms = end - Date.now();
+
+      if (ms <= 0) return "доступно";
+
+      const totalMinutes = Math.ceil(ms / 60000);
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+
+      if (hours <= 0) return minutes + " мин";
+      return hours + " ч " + minutes + " мин";
+    }
+
+    function setView(name) {
+      clearMessages();
+
+      registerView.classList.toggle("active", name === "register");
+      loginView.classList.toggle("active", name === "login");
+      promoView.classList.toggle("active", name === "promo");
+      adminView.classList.toggle("active", name === "admin");
+      uidPill.classList.remove("active");
+
+      if (name === "register") {
+        panelTitle.textContent = "Регистрация";
+        panelSubtitle.textContent = "Создайте аккаунт для доступа к подбору.";
+      }
+
+      if (name === "login") {
+        panelTitle.textContent = "Вход";
+        panelSubtitle.textContent = "Введите данные аккаунта.";
+      }
+
+      if (name === "promo") {
+        panelTitle.textContent = "Подбор промокодов";
+        panelSubtitle.textContent = "Активируйте код продукта и используйте подбор.";
+      }
+
+      if (name === "admin") {
+        panelTitle.textContent = "Админ-панель";
+        panelSubtitle.textContent = "Управление пользователями и кодами.";
+        renderAdminPanel();
+      }
+    }
+
+    function pickPromoCodeVisual() {
+      let code = "";
+      const values = new Uint32Array(16);
+      crypto.getRandomValues(values);
+
+      for (const value of values) {
+        code += CHARS[value % CHARS.length];
+      }
+
+      promoCodeEl.classList.add("spinning");
+
+      setTimeout(() => {
+        promoCodeEl.textContent = code;
+        promoCodeEl.classList.remove("empty");
+        promoCodeEl.classList.remove("spinning");
+      }, 280);
+
+      return code;
+    }
+
+    async function fetchProfile() {
+      const { data: sessionData } = await db.auth.getSession();
+      const session = sessionData.session;
+
+      if (!session) return null;
+
+      const { data, error } = await db
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (error) {
+        console.error(error);
+        return null;
+      }
+
+      return data;
+    }
+
+    function renderAccessState(profile) {
+      const remaining = Math.max(0, profile.remaining_uses || 0);
+      const limit = profile.limit_total || DAILY_LIMIT;
+      const percent = Math.max(0, Math.min(100, (remaining / limit) * 100));
+      const cooldown = profile.cooldown_until;
+      const isCooldown = cooldown && new Date(cooldown).getTime() > Date.now();
+      const isActive = profile.active && remaining > 0 && !isCooldown;
+
+      usesText.textContent = "Доступно подборов: " + remaining + " / " + limit;
+      barFill.style.width = percent + "%";
+
+      if (!profile.active) {
+        accessBadge.textContent = "Не активирован";
+        accessBadge.className = "status-badge";
+        cooldownText.textContent = "";
+        productHelp.textContent = "Введите код продукта.";
+        return;
+      }
+
+      if (isCooldown) {
+        accessBadge.textContent = "Лимит закончился";
+        accessBadge.className = "status-badge warn";
+        cooldownText.textContent = "обновление через " + formatCooldown(cooldown);
+        productHelp.textContent = "Можно подождать 24 часа или активировать новый код продукта.";
+        return;
+      }
+
+      if (isActive) {
+        accessBadge.textContent = "Доступ активен";
+        accessBadge.className = "status-badge active";
+        cooldownText.textContent = "";
+        productHelp.textContent = "После 5 подборов лимит обновится через 24 часа.";
+        return;
+      }
+
+      accessBadge.textContent = "Требуется код";
+      accessBadge.className = "status-badge warn";
+      cooldownText.textContent = "";
+      productHelp.textContent = "Введите новый код продукта, чтобы продолжить.";
+    }
+
+    async function renderSession() {
+      configNote.classList.toggle("show", !isConfigured());
+
+      if (!isConfigured()) {
+        document.body.classList.remove("app-mode");
+        setView("register");
+        return;
+      }
+
+      currentProfile = await fetchProfile();
+
+      if (!currentProfile) {
+        document.body.classList.remove("app-mode");
+        guestActions.style.display = "none";
+        accessCard.style.display = "block";
+
+        navActions.innerHTML = `
+          <button class="btn btn-soft" id="navLoginLive" type="button">Войти</button>
+          <button class="btn btn-primary" id="navRegisterLive" type="button">Регистрация</button>
+        `;
+
+        safeOn("#navLoginLive", "click", () => setView("login"));
+        safeOn("#navRegisterLive", "click", () => setView("register"));
+
+        promoCodeEl.textContent = "Тут появится промокод...";
+        promoCodeEl.classList.add("empty");
+
+        if (!registerView.classList.contains("active") && !loginView.classList.contains("active")) {
+          setView("register");
+        }
+
+        return;
+      }
+
+      document.body.classList.add("app-mode");
+      guestActions.style.display = "none";
+      accessCard.style.display = "none";
+
+      navActions.innerHTML = `
+        <button class="btn btn-soft" type="button">${escapeHtml(currentProfile.nick)}</button>
+        <button class="btn btn-primary" id="topLogoutBtn" type="button">Выйти</button>
+      `;
+
+      safeOn("#topLogoutBtn", "click", logout);
+
+      if (currentProfile.is_admin) {
+        setView("admin");
+        return;
+      }
+
+      setView("promo");
+
+      $("#profileNick").textContent = currentProfile.nick;
+      $("#profileUid").textContent = formatUid(currentProfile);
+      $("#profileTg").textContent = currentProfile.tg_username;
+      $("#profileStandoff").textContent = currentProfile.standoff_id;
+      $("#profileUidFull").textContent = formatUid(currentProfile);
+
+      renderAccessState(currentProfile);
+    }
+
+    async function logout() {
+      await db.auth.signOut();
+      currentProfile = null;
+      document.body.classList.remove("app-mode");
+      renderSession();
+      setView("register");
+      showToast("Вы вышли из аккаунта");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function generateProductCode() {
+      let code = "";
+      const values = new Uint32Array(12);
+      crypto.getRandomValues(values);
+
+      for (const value of values) {
+        code += CHARS[value % CHARS.length];
+      }
+
+      return "SOLUNE-" + code.slice(0, 4) + "-" + code.slice(4, 8) + "-" + code.slice(8, 12);
+    }
+
+    async function renderAdminPanel() {
+      if (!currentProfile?.is_admin) return;
+
+      const { data: users, error: usersError } = await db
+        .from("profiles")
+        .select("id, uid_num, nick, tg_username, standoff_id, remaining_uses, limit_total, is_admin")
+        .order("uid_num", { ascending: true });
+
+      const { data: codes, error: codesError } = await db
+        .from("product_codes")
+        .select("code, limit_amount, used_by, used_at, created_at")
+        .order("created_at", { ascending: false });
+
+      if (usersError || codesError) {
+        console.error(usersError || codesError);
+        adminList.innerHTML = `<div class="admin-item"><span>Не удалось загрузить данные.</span></div>`;
+        return;
+      }
+
+      adminStats.textContent = users.length + " пользователей · " + codes.length + " кодов";
+
+      if (adminMode === "users") {
+        adminList.innerHTML = users.length ? users.map((user) => `
+          <div class="admin-item">
+            <div class="admin-item-main">
+              <b>${escapeHtml(user.nick)} · UID-${formatUidNum(user.uid_num)}</b>
+              <span>${escapeHtml(user.tg_username)} · Standoff ID: ${escapeHtml(user.standoff_id)}</span>
+              <span>Подборов: ${user.remaining_uses || 0} / ${user.limit_total || DAILY_LIMIT}${user.is_admin ? " · ADMIN" : ""}</span>
+            </div>
+            <div class="admin-actions-small">
+              <button class="mini-btn danger" data-delete-user="${escapeHtml(user.id)}">Удалить</button>
+            </div>
+          </div>
+        `).join("") : `<div class="admin-item"><span>Пользователей пока нет.</span></div>`;
+
+        adminList.querySelectorAll("[data-delete-user]").forEach((button) => {
+          button.addEventListener("click", async () => {
+            const id = button.dataset.deleteUser;
+
+            if (id === currentProfile.id) {
+              showToast("Нельзя удалить себя");
+              return;
+            }
+
+            const { error } = await db.from("profiles").delete().eq("id", id);
+
+            if (error) {
+              console.error(error);
+              showToast("Не удалось удалить");
+              return;
+            }
+
+            renderAdminPanel();
+            showToast("Пользователь удалён");
+          });
+        });
+
+        return;
+      }
+
+      adminList.innerHTML = codes.length ? codes.map((item) => `
+        <div class="admin-item">
+          <div class="admin-item-main">
+            <b>${escapeHtml(item.code)}</b>
+            <span>${item.used_by ? "Использован" : "Не использован"} · лимит: ${item.limit_amount || DAILY_LIMIT}</span>
+          </div>
+          <div class="admin-actions-small">
+            <button class="mini-btn danger" data-delete-code="${escapeHtml(item.code)}">Удалить</button>
+          </div>
+        </div>
+      `).join("") : `<div class="admin-item"><span>Кодов пока нет.</span></div>`;
+
+      adminList.querySelectorAll("[data-delete-code]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const code = button.dataset.deleteCode;
+          const { error } = await db.from("product_codes").delete().eq("code", code);
+
+          if (error) {
+            console.error(error);
+            showToast("Не удалось удалить код");
+            return;
+          }
+
+          renderAdminPanel();
+          showToast("Код удалён");
+        });
+      });
+    }
+
+    safeOn("#navLoginBtn", "click", () => setView("login"));
+    safeOn("#navRegisterBtn", "click", () => setView("register"));
+    safeOn("#accessLoginBtn", "click", () => setView("login"));
+    safeOn("#switchToLogin", "click", () => setView("login"));
+    safeOn("#switchToRegister", "click", () => setView("register"));
+
+    regStandoff.addEventListener("input", () => {
+      regStandoff.value = regStandoff.value.replace(/\D/g, "").slice(0, 10);
+    });
+
+    productCodeInput.addEventListener("input", () => {
+      productCodeInput.value = normalizeProductCode(productCodeInput.value);
+    });
+
+    adminCodeInput.addEventListener("input", () => {
+      adminCodeInput.value = normalizeProductCode(adminCodeInput.value);
+    });
+
+    registerForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessages();
+
+      if (!isConfigured()) {
+        showMessage(registerMessage, "Сначала подключите Supabase URL и anon key.");
+        return;
+      }
+
+      const nick = $("#regNick").value.trim();
+      const tg = normalizeTg($("#regTg").value);
+      const standoffId = $("#regStandoff").value.trim();
+      const password = $("#regPassword").value;
+
+      if (!/^[a-zA-Zа-яА-ЯёЁ0-9_]{3,24}$/.test(nick)) {
+        showMessage(registerMessage, "Ник должен быть 3–24 символа: буквы, цифры или нижнее подчёркивание.");
+        return;
+      }
+
+      if (!/^@[a-zA-Z0-9_]{3,32}$/.test(tg)) {
+        showMessage(registerMessage, "Telegram username должен выглядеть так: @username.");
+        return;
+      }
+
+      if (!/^[0-9]+$/.test(standoffId) || standoffId.length < 7 || standoffId.length > 10) {
+        showMessage(registerMessage, "Standoff ID должен содержать только цифры: от 7 до 10.");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage(registerMessage, "Пароль должен быть минимум 6 символов.");
+        return;
+      }
+
+      const authEmail = makeAuthEmail();
+
+      const { error } = await db.auth.signUp({
+        email: authEmail,
+        password,
+        options: {
+          data: {
+            nick,
+            tg_username: tg,
+            standoff_id: standoffId
+          }
+        }
+      });
+
+      if (error) {
+        console.error(error);
+        showMessage(registerMessage, "Не удалось зарегистрироваться. Возможно, такой ник или Telegram уже занят.");
+        return;
+      }
+
+      const { error: signInError } = await db.auth.signInWithPassword({
+        email: authEmail,
+        password
+      });
+
+      if (signInError) {
+        showMessage(registerMessage, "Аккаунт создан. Если вход не выполнен, отключите Confirm email в Supabase Auth.", "good");
+        return;
+      }
+
+      registerForm.reset();
+      await renderSession();
+      showToast("Аккаунт создан");
+    });
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessages();
+
+      if (!isConfigured()) {
+        showMessage(loginMessage, "Сначала подключите Supabase URL и anon key.");
+        return;
+      }
+
+      const login = normalizeLogin($("#loginName").value);
+      const password = $("#loginPassword").value;
+
+      const { data: authEmail, error: resolveError } = await db.rpc("resolve_login", {
+        p_login: login
+      });
+
+      if (resolveError || !authEmail) {
+        console.error(resolveError);
+        showMessage(loginMessage, "Аккаунт не найден.");
+        return;
+      }
+
+      const { error } = await db.auth.signInWithPassword({
+        email: authEmail,
+        password
+      });
+
+      if (error) {
+        console.error(error);
+        showMessage(loginMessage, "Неверный ник, Telegram username или пароль.");
+        return;
+      }
+
+      loginForm.reset();
+      await renderSession();
+      showToast("Вход выполнен");
+    });
+
+    safeOn("#activateProductBtn", "click", async () => {
+      const code = normalizeProductCode(productCodeInput.value);
+
+      if (!code) {
+        showToast("Введите код продукта");
+        return;
+      }
+
+      const { data, error } = await db.rpc("redeem_product_code", {
+        p_code: code
+      });
+
+      if (error || !data?.ok) {
+        console.error(error || data);
+        const messages = {
+          invalid_code: "Неверный код продукта",
+          code_used: "Этот код уже использован",
+          not_authenticated: "Сначала войдите"
+        };
+
+        showToast(messages[data?.message] || "Не удалось активировать код");
+        return;
+      }
+
+      productCodeInput.value = "";
+      promoCodeEl.textContent = "Тут появится промокод...";
+      promoCodeEl.classList.add("empty");
+      await renderSession();
+      showToast("Код продукта активирован");
+    });
+
+    safeOn("#pickBtn", "click", async () => {
+      const { data, error } = await db.rpc("use_pick");
+
+      if (error || !data?.ok) {
+        console.error(error || data);
+        const messages = {
+          not_active: "Сначала активируйте код продукта",
+          cooldown: "Лимит закончился",
+          limit_ended: "Лимит закончился"
+        };
+
+        showToast(messages[data?.message] || "Подбор недоступен");
+        await renderSession();
+        return;
+      }
+
+      pickPromoCodeVisual();
+      await renderSession();
+      showToast("Промокод подобран");
+    });
+
+    safeOn("#copyBtn", "click", async () => {
+      const code = promoCodeEl.textContent.trim();
+
+      if (!code || promoCodeEl.classList.contains("empty")) {
+        showToast("Сначала подберите промокод");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(code);
+        showToast("Промокод скопирован");
+      } catch {
+        showToast("Не удалось скопировать");
+      }
+    });
+
+    safeOn("#showUsersBtn", "click", () => {
+      adminMode = "users";
+      $("#showUsersBtn").className = "btn btn-primary";
+      $("#showCodesBtn").className = "btn btn-soft";
+      renderAdminPanel();
+    });
+
+    safeOn("#showCodesBtn", "click", () => {
+      adminMode = "codes";
+      $("#showUsersBtn").className = "btn btn-soft";
+      $("#showCodesBtn").className = "btn btn-primary";
+      renderAdminPanel();
+    });
+
+    safeOn("#adminCreateCodeBtn", "click", async () => {
+      let code = normalizeProductCode(adminCodeInput.value);
+
+      if (!code) {
+        code = generateProductCode();
+      }
+
+      const { error } = await db.from("product_codes").insert({
+        code,
+        limit_amount: DAILY_LIMIT
+      });
+
+      if (error) {
+        console.error(error);
+        showToast("Не удалось создать код");
+        return;
+      }
+
+      adminCodeInput.value = "";
+      adminMode = "codes";
+      $("#showUsersBtn").className = "btn btn-soft";
+      $("#showCodesBtn").className = "btn btn-primary";
+      await renderAdminPanel();
+      showToast("Код создан");
+    });
+
+    db.auth.onAuthStateChange(() => {
+      renderSession();
+    });
+
+    renderSession();
+  </script>
+
+</body>
+</html>
