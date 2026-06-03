@@ -2,313 +2,100 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Solune Project — Admin</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root {
-      --bg:#040913; --text:#f7fbff; --muted:#c1cbd9; --line:rgba(165,190,230,.16);
-      --blue-2:#2f7fe6; --blue-3:#1b57ac; --violet:#5f52d9; --danger:#ff7d7d;
-      --shadow:0 28px 78px rgba(0,0,0,.34);
-    }
-    *{box-sizing:border-box} html,body{margin:0;min-height:100%}
-    body{
-      color:var(--text); font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-      background:
-        radial-gradient(circle at 15% 25%, rgba(36,111,212,.22), transparent 330px),
-        radial-gradient(circle at 78% 18%, rgba(95,82,217,.16), transparent 360px),
-        linear-gradient(135deg,#040913 0%,#071527 52%,#030711 100%);
-      overflow-x:hidden; -webkit-font-smoothing:antialiased;
-    }
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.017) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.017) 1px,transparent 1px);background-size:54px 54px}
-    button,input{font:inherit} button{cursor:pointer}
+
+    :root{--bg:#040913;--text:#f7fbff;--muted:#c1cbd9;--muted-soft:#9eabc0;--line:rgba(165,190,230,.16);--blue-2:#2f7fe6;--blue-3:#1b57ac;--violet:#5f52d9;--danger:#ff7d7d;--shadow:0 28px 78px rgba(0,0,0,.34)}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%}
+    html{background:var(--bg);overflow-x:hidden}
+    body{color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 15% 25%,rgba(36,111,212,.22),transparent 330px),radial-gradient(circle at 78% 18%,rgba(95,82,217,.16),transparent 360px),radial-gradient(circle at 54% 92%,rgba(37,116,198,.10),transparent 380px),linear-gradient(135deg,#040913 0%,#071527 52%,#030711 100%);overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.017) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.017) 1px,transparent 1px);background-size:54px 54px}
+    button,input{font:inherit}
+    button{cursor:pointer}
     .page{width:min(1180px,calc(100% - 42px));min-height:100vh;margin:0 auto;padding:30px 0 64px;position:relative;z-index:1}
-    .nav{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:48px}
-    .brand{display:inline-flex;gap:12px;align-items:center;color:white;text-decoration:none}
-    .logo{display:inline-flex;align-items:center;justify-content:center;min-width:52px;height:34px;padding-right:5px;font-size:30px;line-height:1;font-weight:850;font-style:italic;letter-spacing:-.07em;background:linear-gradient(135deg,#5fb4ff 0%,#2f7fe6 48%,#5f52d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 20px rgba(47,127,230,.30))}
-    .brand-text{font-size:14px;font-weight:720;letter-spacing:-.01em}
-    .nav-actions,.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .btn{height:42px;border-radius:12px;border:1px solid transparent;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:650;background:transparent;text-decoration:none;white-space:nowrap}
+    .nav{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:46px}
+    .brand{display:inline-flex;gap:12px;align-items:center;color:#fff;text-decoration:none}
+    .logo{display:inline-flex;align-items:center;justify-content:center;min-width:52px;height:34px;padding-right:5px;font-size:30px;line-height:1;font-weight:850;font-style:italic;letter-spacing:-.07em;background:linear-gradient(135deg,#5fb4ff 0%,#2f7fe6 48%,#5f52d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 20px rgba(47,127,230,.30));user-select:none}
+    .brand-text{font-size:14px;font-weight:720;letter-spacing:-.01em;color:#fff}
+    .nav-actions,.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .btn{height:42px;border-radius:12px;border:1px solid transparent;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:650;background:transparent;transition:opacity .18s ease,border-color .18s ease,background .18s ease;white-space:nowrap;text-decoration:none}
+    .btn:hover{opacity:.92}
     .btn-primary{background:linear-gradient(135deg,var(--blue-2),var(--blue-3));border-color:rgba(87,150,230,.28);box-shadow:0 16px 34px rgba(31,93,180,.26)}
     .btn-soft{background:rgba(255,255,255,.055);border-color:var(--line)}
-    .btn-danger,.mini-btn.danger{background:rgba(255,125,125,.11);border-color:rgba(255,125,125,.24);color:#ffd8d8}
+    .btn-danger{background:rgba(255,125,125,.11);border-color:rgba(255,125,125,.24);color:#ffd8d8}
+    .btn-wide{width:100%}
+    input{height:46px;min-width:0;border:1px solid rgba(165,190,230,.16);border-radius:14px;background:rgba(3,10,18,.58);color:white;padding:0 14px;outline:0;font-size:14px}
+    input:focus{border-color:rgba(47,127,230,.68);box-shadow:0 0 0 4px rgba(47,127,230,.10);background:rgba(3,10,18,.72)}
+    .toast{position:fixed;left:50%;bottom:22px;z-index:160;transform:translateX(-50%);opacity:0;pointer-events:none;padding:11px 15px;border-radius:999px;background:linear-gradient(135deg,var(--blue-2),var(--blue-3));color:#fff;box-shadow:0 16px 38px rgba(47,127,230,.28);font-size:12px;font-weight:600;transition:opacity .18s ease}
+    .toast.show{opacity:1}
+
     .panel{width:min(1120px,100%);margin:0 auto;padding:24px;border-radius:28px;border:1px solid var(--line);background:radial-gradient(circle at 90% 12%,rgba(95,82,217,.14),transparent 160px),linear-gradient(135deg,rgba(14,29,52,.84),rgba(8,18,32,.88));backdrop-filter:blur(24px);box-shadow:var(--shadow)}
     .head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
-    h1{margin:0;font-size:26px;letter-spacing:-.04em} p{color:var(--muted);font-size:13px;line-height:1.5;margin:7px 0 0}
+    h1{margin:0;font-size:26px;letter-spacing:-.04em}
+    p{color:var(--muted);font-size:13px;line-height:1.5;margin:7px 0 0}
     .grid{display:grid;grid-template-columns:minmax(310px,360px) 1fr;gap:16px;align-items:start}
     .card{display:grid;gap:10px;padding:14px;border-radius:16px;border:1px solid rgba(165,190,230,.12);background:rgba(255,255,255,.032);margin-bottom:13px}
     .card-title{font-size:13px;font-weight:700}
     .input-row{display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:9px}
-    input{height:42px;min-width:0;border:1px solid rgba(165,190,230,.16);border-radius:14px;background:rgba(3,10,18,.58);color:white;padding:0 14px;outline:0;font-size:14px}
     .tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px}
     .list{display:grid;gap:8px;max-height:640px;overflow:auto}
     .item{display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;padding:12px;border-radius:14px;border:1px solid rgba(165,190,230,.12);background:rgba(255,255,255,.032)}
-    .item-main{display:grid;gap:4px;text-align:left;min-width:0} .item-main b{font-size:13px} .item-main span{color:var(--muted);font-size:12px;word-break:break-word}
-    .mini-btn{min-height:32px;border-radius:9px;border:1px solid rgba(165,190,230,.14);padding:0 10px;background:rgba(255,255,255,.045);color:white;font-size:12px;font-weight:650}
+    .item-main{display:grid;gap:4px;text-align:left;min-width:0}
+    .item-main b{font-size:13px}
+    .item-main span{color:var(--muted);font-size:12px;word-break:break-word}
+    .item-actions{display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap}
+    .mini-btn{min-height:32px;border-radius:9px;border:1px solid rgba(165,190,230,.14);padding:0 10px;background:rgba(255,255,255,.045);color:white;font-size:12px;font-weight:650;cursor:pointer}
+    .mini-btn.danger{background:rgba(255,125,125,.11);border-color:rgba(255,125,125,.24);color:#ffd8d8}
     .notice{padding:12px;border-radius:14px;border:1px solid rgba(255,211,110,.22);background:rgba(255,211,110,.08);color:#ffe9ae;font-size:13px;line-height:1.5}
-    .toast{position:fixed;left:50%;bottom:22px;z-index:80;transform:translateX(-50%);opacity:0;pointer-events:none;padding:11px 15px;border-radius:999px;background:linear-gradient(135deg,var(--blue-2),var(--blue-3));color:#fff;box-shadow:0 16px 38px rgba(47,127,230,.28);font-size:12px;font-weight:600;transition:opacity .18s ease}
-    .toast.show{opacity:1}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}.input-row{grid-template-columns:1fr}.item{grid-template-columns:1fr}}
+    .muted-note{margin:0;color:var(--muted-soft);font-size:12px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.input-row,.tabs{grid-template-columns:1fr}.item{grid-template-columns:1fr}.item-actions{justify-content:flex-start}}
   </style>
 </head>
 <body>
   <div class="page">
     <header class="nav">
       <a class="brand" href="index.html"><span class="logo">SP</span><span class="brand-text">SOLUNE PROJECT</span></a>
-      <div class="nav-actions">
-        <a class="btn btn-soft" href="index.html">На сайт</a>
-        <button class="btn btn-primary" id="logoutBtn" type="button">Выйти</button>
-      </div>
+      <div class="nav-actions"><a class="btn btn-soft" href="index.html">На сайт</a><button class="btn btn-primary" id="logoutBtn" type="button">Выйти</button></div>
     </header>
-
     <main class="panel">
-      <div class="head">
-        <div>
-          <h1>Админ-панель</h1>
-          <p>Создание кодов, удаление пользователей и управление доступом.</p>
-        </div>
-        <span class="btn btn-soft" id="stats">Загрузка...</span>
-      </div>
-
+      <div class="head"><div><h1>Админ-панель</h1><p>Пользователи и коды доступа.</p></div><span class="btn btn-soft" id="stats">Загрузка...</span></div>
       <div class="notice" id="guardNotice" style="display:none"></div>
-
       <div class="grid" id="adminContent" style="display:none">
         <section>
-          <div class="card">
-            <span class="card-title">Создать код продукта</span>
-            <div class="input-row">
-              <input id="codeInput" autocomplete="off" placeholder="">
-              <button class="btn btn-primary" id="createCodeBtn" type="button">Создать</button>
-            </div>
-            
-          </div>
-
-          <div class="card">
-            <span class="card-title">Раздел</span>
-            <div class="tabs">
-              <button class="btn btn-primary" id="usersTab" type="button">Пользователи</button>
-              <button class="btn btn-soft" id="codesTab" type="button">Коды</button>
-            </div>
-          </div>
+          <div class="card" id="userSearchCard"><span class="card-title">Поиск пользователя по UID</span><input id="uidSearchInput" autocomplete="off"></div>
+          <div class="card" id="productCodeCard"><span class="card-title">Создать код продукта</span><div class="input-row"><input id="productCodeInput" autocomplete="off"><button class="btn btn-primary" id="createProductCodeBtn" type="button">Создать</button></div></div>
+<div class="card"><span class="card-title">Раздел</span><div class="tabs"><button class="btn btn-primary" id="usersTab" type="button">Пользователи</button><button class="btn btn-soft" id="productsTab" type="button">Коды доступа</button></div></div>
         </section>
-
         <section class="list" id="list"></section>
       </div>
     </main>
   </div>
-
   <div class="toast" id="toast">Готово</div>
-
   <script>
     const SUPABASE_URL = "https://eyfhfjwykaqzkpzhgscs.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5Zmhmand5a2Fxemtwemhnc2NzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MTc3OTAsImV4cCI6MjA5NTk5Mzc5MH0.61GwO-grbwknsWlhFpxLtZ_C1tZonWwwKA-53GravPo";
     const DAILY_LIMIT = 5;
-    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const $ = (s) => document.querySelector(s);
-
-    let profile = null;
-    let mode = "users";
-
-    function showToast(text) {
-      const el = $("#toast");
-      el.textContent = text;
-      el.classList.add("show");
-      setTimeout(() => el.classList.remove("show"), 1700);
-    }
-
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    function uid(n) { return "UID-" + String(n || 1).padStart(4, "0"); }
-
-    function normalizeCode(value) {
-      return value.trim().replace(/\s+/g, "").toUpperCase();
-    }
-
-    function generateCode() {
-      const values = new Uint32Array(12);
-      crypto.getRandomValues(values);
-      let raw = "";
-      for (const v of values) raw += CHARS[v % CHARS.length];
-      return "SOLUNE-" + raw.slice(0,4) + "-" + raw.slice(4,8) + "-" + raw.slice(8,12);
-    }
-
-    async function loadProfile() {
-      const { data: sessionData } = await db.auth.getSession();
-      if (!sessionData.session) return null;
-
-      const { data, error } = await db
-        .from("profiles")
-        .select("*")
-        .eq("id", sessionData.session.user.id)
-        .single();
-
-      if (error) return null;
-      return data;
-    }
-
-    async function init() {
-      profile = await loadProfile();
-
-      if (!profile) {
-        $("#guardNotice").style.display = "block";
-        $("#guardNotice").textContent = "Сначала войдите на сайте, затем откройте админ-панель.";
-        $("#stats").textContent = "Нет входа";
-        return;
-      }
-
-      if (!profile.is_admin) {
-        $("#guardNotice").style.display = "block";
-        $("#guardNotice").textContent = "Нет доступа. Админ-панель доступна только администратору.";
-        $("#stats").textContent = "Нет доступа";
-        return;
-      }
-
-      $("#adminContent").style.display = "grid";
-      await render();
-    }
-
-    async function render() {
-      if (!profile?.is_admin) return;
-
-      const { data: users, error: usersError } = await db
-        .from("profiles")
-        .select("id, uid_num, nick, tg_username, standoff_id, remaining_uses, limit_total, is_admin")
-        .order("uid_num", { ascending: true });
-
-      const { data: codes, error: codesError } = await db
-        .from("product_codes")
-        .select("code, limit_amount, used_by, used_at, created_at")
-        .order("created_at", { ascending: false });
-
-      if (usersError || codesError) {
-        console.error(usersError || codesError);
-        $("#list").innerHTML = '<div class="item"><span>Не удалось загрузить данные.</span></div>';
-        return;
-      }
-
-      $("#stats").textContent = users.length + " пользователей · " + codes.length + " кодов";
-
-      if (mode === "users") {
-        $("#list").innerHTML = users.length ? users.map((u) => `
-          <div class="item">
-            <div class="item-main">
-              <b>${escapeHtml(u.nick)} · ${uid(u.uid_num)}</b>
-              <span>${escapeHtml(u.tg_username)} · Standoff ID: ${escapeHtml(u.standoff_id)}</span>
-              <span>Подборов: ${u.remaining_uses || 0} / ${u.limit_total || DAILY_LIMIT}${u.is_admin ? " · ADMIN" : ""}</span>
-            </div>
-            <button class="mini-btn danger" data-delete-user="${escapeHtml(u.id)}">Удалить</button>
-          </div>
-        `).join("") : '<div class="item"><span>Пользователей пока нет.</span></div>';
-
-        document.querySelectorAll("[data-delete-user]").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const userId = btn.dataset.deleteUser;
-            if (userId === profile.id) {
-              showToast("Нельзя удалить себя");
-              return;
-            }
-
-            const { data, error } = await db.functions.invoke("delete-user", {
-              body: { user_id: userId }
-            });
-
-            if (error || !data?.ok) {
-              console.error(error || data);
-              showToast("Нужна Edge Function delete-user");
-              return;
-            }
-
-            await render();
-            showToast("Пользователь удалён");
-          });
-        });
-        return;
-      }
-
-      $("#list").innerHTML = codes.length ? codes.map((c) => `
-        <div class="item">
-          <div class="item-main">
-            <b>${escapeHtml(c.code)}</b>
-            <span>${c.used_by ? "Использован" : "Не использован"} · лимит: ${c.limit_amount || DAILY_LIMIT}</span>
-          </div>
-          <button class="mini-btn danger" data-delete-code="${escapeHtml(c.code)}">Удалить</button>
-        </div>
-      `).join("") : '<div class="item"><span>Кодов пока нет.</span></div>';
-
-      document.querySelectorAll("[data-delete-code]").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const code = btn.dataset.deleteCode;
-          const { error } = await db.from("product_codes").delete().eq("code", code);
-
-          if (error) {
-            console.error(error);
-            showToast("Не удалось удалить код");
-            return;
-          }
-
-          await render();
-          showToast("Код удалён");
-        });
-      });
-    }
-
-    $("#createCodeBtn").addEventListener("click", async () => {
-      const code = normalizeCode($("#codeInput").value);
-
-      if (!code) {
-        showToast("Введите код");
-        return;
-      }
-
-      const { error } = await db.from("product_codes").insert({
-        code,
-        limit_amount: DAILY_LIMIT
-      });
-
-      if (error) {
-        console.error(error);
-        showToast("Не удалось создать код");
-        return;
-      }
-
-      $("#codeInput").value = "";
-      mode = "codes";
-      $("#usersTab").className = "btn btn-soft";
-      $("#codesTab").className = "btn btn-primary";
-      await render();
-      showToast("Код создан");
-    });
-
-    $("#usersTab").addEventListener("click", async () => {
-      mode = "users";
-      $("#usersTab").className = "btn btn-primary";
-      $("#codesTab").className = "btn btn-soft";
-      await render();
-    });
-
-    $("#codesTab").addEventListener("click", async () => {
-      mode = "codes";
-      $("#usersTab").className = "btn btn-soft";
-      $("#codesTab").className = "btn btn-primary";
-      await render();
-    });
-
-    $("#codeInput").addEventListener("input", () => {
-      $("#codeInput").value = normalizeCode($("#codeInput").value);
-    });
-
-    $("#logoutBtn").addEventListener("click", async () => {
-      await db.auth.signOut();
-      location.href = "index.html";
-    });
-
-    init();
+    let profile=null,mode="users",usersCache=[],productCodesCache=[];
+    function showToast(text){const el=$("#toast");el.textContent=text;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1700)}
+    function escapeHtml(value){return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+    function uid(n){return"UID-"+String(n||1).padStart(4,"0")}
+    function parseUid(value){const digits=String(value||"").replace(/\D/g,"");if(!digits)return null;return parseInt(digits,10)}
+    function normalizeCode(value){return value.trim().replace(/\s+/g,"").toUpperCase()}
+    async function copyText(text){try{await navigator.clipboard.writeText(text);showToast("Скопировано")}catch{const area=document.createElement("textarea");area.value=text;document.body.appendChild(area);area.select();document.execCommand("copy");area.remove();showToast("Скопировано")}}
+    async function loadProfile(){const{data:sessionData}=await db.auth.getSession();if(!sessionData.session)return null;const{data,error}=await db.from("profiles").select("*").eq("id",sessionData.session.user.id).single();if(error)return null;return data}
+    async function init(){profile=await loadProfile();if(!profile){$("#guardNotice").style.display="block";$("#guardNotice").textContent="Сначала войдите на сайте, затем откройте админ-панель.";$("#stats").textContent="Нет входа";return}if(!profile.is_admin){$("#guardNotice").style.display="block";$("#guardNotice").textContent="Нет доступа. Админ-панель доступна только администратору.";$("#stats").textContent="Нет доступа";return}$("#adminContent").style.display="grid";await loadData();render()}
+    async function loadData(){const{data:users,error:usersError}=await db.from("profiles").select("id, uid_num, nick, tg_username, standoff_id, remaining_uses, limit_total, is_admin").order("uid_num",{ascending:true});const{data:productCodes,error:productError}=await db.from("product_codes").select("code, limit_amount, used_by, used_at, created_at").order("created_at",{ascending:false});if(usersError||productError){console.error(usersError||productError);$("#list").innerHTML='<div class="item"><span>Не удалось загрузить данные. Проверь SQL-схему.</span></div>';return}usersCache=users||[];productCodesCache=productCodes||[];$("#stats").textContent=usersCache.length+" пользователей · "+productCodesCache.length+" кодов доступа"}
+    function setMode(nextMode){mode=nextMode;$("#usersTab").className=mode==="users"?"btn btn-primary":"btn btn-soft";$("#productsTab").className=mode==="products"?"btn btn-primary":"btn btn-soft";$("#userSearchCard").style.display=mode==="users"?"grid":"none";$("#productCodeCard").style.display=mode==="products"?"grid":"none";render()}
+    function render(){if(mode==="users")return renderUsers();return renderProductCodes()}
+    function renderUsers(){const searchUid=parseUid($("#uidSearchInput").value);const users=searchUid?usersCache.filter(u=>Number(u.uid_num)===searchUid):usersCache;$("#list").innerHTML=users.length?users.map(u=>`<div class="item"><div class="item-main"><b>${escapeHtml(u.nick)} · ${uid(u.uid_num)}</b><span>${escapeHtml(u.tg_username)} · Standoff ID: ${escapeHtml(u.standoff_id)}</span><span>Подборов: ${u.remaining_uses||0} / ${u.limit_total||DAILY_LIMIT}${u.is_admin?" · ADMIN":""}</span></div><div class="item-actions"><button class="mini-btn" data-copy="${uid(u.uid_num)}">Копировать UID</button><button class="mini-btn danger" data-delete-user="${escapeHtml(u.id)}">Удалить</button></div></div>`).join(""):'<div class="item"><span>Пользователь с таким UID не найден.</span></div>';document.querySelectorAll("[data-copy]").forEach(btn=>btn.addEventListener("click",()=>copyText(btn.dataset.copy)));document.querySelectorAll("[data-delete-user]").forEach(btn=>{btn.addEventListener("click",async()=>{const userId=btn.dataset.deleteUser;if(userId===profile.id){showToast("Нельзя удалить себя");return}const{error}=await db.from("profiles").delete().eq("id",userId);if(error){console.error(error);showToast("Не удалось удалить");return}await loadData();render();showToast("Профиль удалён")})})}
+    function renderProductCodes(){$("#list").innerHTML=productCodesCache.length?productCodesCache.map(c=>`<div class="item"><div class="item-main"><b>${escapeHtml(c.code)}</b><span>${c.used_by?"Использован":"Не использован"} · лимит: ${c.limit_amount||DAILY_LIMIT}</span></div><div class="item-actions"><button class="mini-btn" data-copy="${escapeHtml(c.code)}">Копировать</button><button class="mini-btn danger" data-delete-product="${escapeHtml(c.code)}">Удалить</button></div></div>`).join(""):'<div class="item"><span>Кодов доступа пока нет.</span></div>';document.querySelectorAll("[data-copy]").forEach(btn=>btn.addEventListener("click",()=>copyText(btn.dataset.copy)));document.querySelectorAll("[data-delete-product]").forEach(btn=>{btn.addEventListener("click",async()=>{const{error}=await db.from("product_codes").delete().eq("code",btn.dataset.deleteProduct);if(error){console.error(error);showToast("Не удалось удалить код");return}await loadData();render();showToast("Код удалён")})})}
+    $("#createProductCodeBtn".addEventListener("click",async()=>{const code=normalizeCode($("#productCodeInput").value);if(!code){showToast("Введите код");return}const{error}=await db.from("product_codes").insert({code,limit_amount:DAILY_LIMIT});if(error){console.error(error);showToast("Не удалось создать код");return}$("#productCodeInput").value="";await loadData();setMode("products");await copyText(code);showToast("Код создан и скопирован")});
+    $("#uidSearchInput").addEventListener("input",renderUsers);$("#productCodeInput").addEventListener("input",()=>{$("#productCodeInput").value=normalizeCode($("#productCodeInput").value)});$("#usersTab").addEventListener("click",()=>setMode("users"));$("#productsTab").addEventListener("click",()=>setMode("products"));$("#logoutBtn").addEventListener("click",async()=>{await db.auth.signOut();location.href="index.html"});init();
   </script>
 </body>
 </html>
