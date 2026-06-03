@@ -102,6 +102,127 @@
     .profile-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-radius:12px;border:1px solid rgba(165,190,230,.12);background:rgba(255,255,255,.03);color:var(--muted);font-size:12px;font-weight:400}
     .profile-row b{color:#fff;text-align:right;word-break:break-word;font-weight:500}
     @media(max-width:980px){.hero{grid-template-columns:1fr}body.app-mode .promo-view.active{grid-template-columns:1fr;grid-template-areas:"profile" "status" "product" "code" "actions"}body.app-mode .code-stage{min-height:190px}.promo-actions,.product-row{grid-template-columns:1fr}}
+  
+    /* SOLUNE dashboard structure update */
+    .access-buttons {
+      grid-template-columns: 1fr;
+    }
+
+    .telegram-line {
+      display: none;
+      width: fit-content;
+      margin: 16px auto 0;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #9fcaff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 650;
+      opacity: .92;
+    }
+
+    .telegram-line svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor;
+      filter: drop-shadow(0 0 12px rgba(47, 127, 230, .36));
+    }
+
+    body.app-mode .telegram-line {
+      display: inline-flex;
+    }
+
+    body.app-mode .promo-view.active {
+      grid-template-columns: minmax(340px, 390px) minmax(520px, 1fr);
+      grid-template-areas:
+        "profile code"
+        "status code"
+        "product actions";
+      gap: 14px;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    body.app-mode .promo-view:not(.access-visible) {
+      grid-template-areas:
+        "profile code"
+        "product code"
+        "product actions";
+    }
+
+    body.app-mode .promo-view .access-status {
+      display: none;
+      grid-area: status;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view.access-visible .access-status {
+      display: grid;
+    }
+
+    body.app-mode .promo-view .profile-mini {
+      grid-area: profile;
+      margin: 0;
+      min-height: 86px;
+    }
+
+    body.app-mode .promo-view .product-box {
+      grid-area: product;
+      margin: 0;
+      align-self: stretch;
+    }
+
+    body.app-mode .promo-view .code-stage {
+      grid-area: code;
+      min-height: 286px;
+      height: 100%;
+      margin: 0;
+    }
+
+    body.app-mode .promo-view .promo-actions {
+      grid-area: actions;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      align-self: start;
+    }
+
+    body.app-mode .product-row {
+      grid-template-columns: minmax(0, 1fr) 136px;
+    }
+
+    @media (max-width: 980px) {
+      body.app-mode .promo-view.active,
+      body.app-mode .promo-view:not(.access-visible) {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "profile"
+          "status"
+          "product"
+          "code"
+          "actions";
+      }
+
+      body.app-mode .promo-view:not(.access-visible) {
+        grid-template-areas:
+          "profile"
+          "product"
+          "code"
+          "actions";
+      }
+
+      body.app-mode .promo-view .code-stage {
+        min-height: 190px;
+      }
+
+      body.app-mode .promo-view .promo-actions,
+      body.app-mode .product-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -127,7 +248,7 @@
             </div>
             <div><strong>Доступ после покупки</strong><p>Приобретите товар через Telegram, чтобы пользоваться подбором.</p></div>
           </div>
-          <div class="access-buttons"><button class="btn btn-primary" id="accessLoginBtn" type="button">Войти</button><a class="btn btn-soft" href="https://t.me/solunedev" target="_blank" rel="noopener">Telegram</a></div>
+          <div class="access-buttons"><button class="btn btn-primary" id="accessLoginBtn" type="button">Войти</button></div>
         </div>
       </section>
 
@@ -165,9 +286,17 @@
           <div class="access-status"><div class="status-top"><span class="status-title">Статус доступа</span><span class="status-badge" id="accessBadge">Не активирован</span></div><div class="usage"><span id="usesText">Доступно подборов: 0 / 5</span><span id="cooldownText"></span></div><div class="bar" aria-hidden="true"><div class="bar-fill" id="barFill"></div></div></div>
           <div class="product-box"><label>Код продукта<div class="product-row"><input id="productCodeInput" type="text" autocomplete="off"><button class="btn btn-primary" id="activateProductBtn" type="button">Активировать</button></div></label><p class="product-help" id="productHelp">Введите код продукта.</p></div>
           <div class="code-stage"><div class="code empty" id="promoCode">Тут появится промокод...</div></div>
-          <div class="promo-actions"><button class="btn btn-primary" id="pickBtn" type="button">Подобрать</button><button class="btn btn-soft" id="copyBtn" type="button">Скопировать</button><a class="btn btn-soft" href="https://t.me/solunedev" target="_blank" rel="noopener">Telegram</a></div>
+          <div class="promo-actions"><button class="btn btn-primary" id="pickBtn" type="button">Подобрать</button><button class="btn btn-soft" id="copyBtn" type="button">Скопировать</button></div>
         </div>
       </section>
+
+        <a class="telegram-line" id="telegramLine" href="https://t.me/solunedev" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21.7 4.4 18.5 20c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.2 2.1c-.2.2-.5.5-1 .5l.3-4.7L18 7.8c.4-.3-.1-.5-.6-.2L6.9 14.2 2.4 12.8c-1-.3-1-1 0-1.4L20 4.6c.8-.3 1.5.2 1.7-.2Z"></path>
+          </svg>
+          <span>Мы в Telegram</span>
+        </a>
+
     </main>
   </div>
 
@@ -205,10 +334,10 @@
     function setView(name){clearMessages();registerView.classList.toggle("active",name==="register");loginView.classList.toggle("active",name==="login");promoView.classList.toggle("active",name==="promo");if(name==="register"){panelTitle.textContent="Регистрация";panelSubtitle.textContent="Создайте аккаунт для доступа к подбору."}if(name==="login"){panelTitle.textContent="Вход";panelSubtitle.textContent="Введите данные аккаунта."}if(name==="promo"){panelTitle.textContent="Подбор промокодов";panelSubtitle.textContent="Активируйте код продукта и используйте подбор."}}
     async function fetchProfile(){const{data:sessionData}=await db.auth.getSession();const session=sessionData.session;if(!session)return null;const{data,error}=await db.from("profiles").select("*").eq("id",session.user.id).single();if(error){await db.auth.signOut();return null}return data}
     function getAccessText(profile){if(!profile?.active)return"Не активирован";if(profile.cooldown_until&&new Date(profile.cooldown_until).getTime()>Date.now())return"Лимит закончился";if((profile.remaining_uses||0)>0)return"Доступ активен";return"Требуется код"}
-    function renderAccessState(profile){const remaining=Math.max(0,profile.remaining_uses||0),limit=profile.limit_total||DAILY_LIMIT,percent=Math.max(0,Math.min(100,remaining/limit*100)),cooldown=profile.cooldown_until,isCooldown=cooldown&&new Date(cooldown).getTime()>Date.now(),isActive=profile.active&&remaining>0&&!isCooldown;usesText.textContent="Доступно подборов: "+remaining+" / "+limit;barFill.style.width=percent+"%";if(!profile.active){accessBadge.textContent="Не активирован";accessBadge.className="status-badge";cooldownText.textContent="";productHelp.textContent="Введите код продукта.";return}if(isCooldown){accessBadge.textContent="Лимит закончился";accessBadge.className="status-badge warn";cooldownText.textContent="обновление через "+formatCooldown(cooldown);productHelp.textContent="Можно подождать 24 часа или активировать новый код продукта.";return}if(isActive){accessBadge.textContent="Доступ активен";accessBadge.className="status-badge active";cooldownText.textContent="";productHelp.textContent="После 5 подборов лимит обновится через 24 часа.";return}accessBadge.textContent="Требуется код";accessBadge.className="status-badge warn";cooldownText.textContent="";productHelp.textContent="Введите новый код продукта, чтобы продолжить."}
+    function renderAccessState(profile){const remaining=Math.max(0,profile.remaining_uses||0),limit=profile.limit_total||DAILY_LIMIT,percent=Math.max(0,Math.min(100,remaining/limit*100)),cooldown=profile.cooldown_until,isCooldown=cooldown&&new Date(cooldown).getTime()>Date.now(),isActive=profile.active&&remaining>0&&!isCooldown;usesText.textContent="Доступно подборов: "+remaining+" / "+limit;barFill.style.width=percent+"%";if(!profile.active){accessBadge.textContent="Не активирован";accessBadge.className="status-badge";cooldownText.textContent="";productHelp.textContent="Введите код продукта.";return}if(isCooldown){accessBadge.textContent="Лимит закончился";accessBadge.className="status-badge warn";cooldownText.textContent="обновление через "+formatCooldown(cooldown);productHelp.textContent="Можно активировать новый код продукта.";return}if(isActive){accessBadge.textContent="Доступ активен";accessBadge.className="status-badge active";cooldownText.textContent="";productHelp.textContent="После 5 подборов лимит обновится через 24 часа.";return}accessBadge.textContent="Требуется код";accessBadge.className="status-badge warn";cooldownText.textContent="";productHelp.textContent="Введите новый код продукта, чтобы продолжить."}
     function openProfileModal(){if(!currentProfile)return;$("#modalNick").textContent=currentProfile.nick;$("#modalUid").textContent=formatUid(currentProfile);$("#modalTg").textContent=currentProfile.tg_username;$("#modalStandoff").textContent=currentProfile.standoff_id;$("#modalAccess").textContent=getAccessText(currentProfile);$("#modalUses").textContent=(currentProfile.remaining_uses||0)+" / "+(currentProfile.limit_total||DAILY_LIMIT);profileModal.classList.add("active");profileModal.setAttribute("aria-hidden","false")}
     function closeProfileModal(){profileModal.classList.remove("active");profileModal.setAttribute("aria-hidden","true")}
-    async function renderSession(){currentProfile=await fetchProfile();if(!currentProfile){document.body.classList.remove("app-mode");accessCard.style.display="block";navActions.innerHTML=`<button class="btn btn-soft" id="navLoginLive" type="button">Войти</button><button class="btn btn-primary" id="navRegisterLive" type="button">Регистрация</button>`;safeOn("#navLoginLive","click",()=>setView("login"));safeOn("#navRegisterLive","click",()=>setView("register"));promoCodeEl.textContent="Тут появится промокод...";promoCodeEl.classList.add("empty");if(!registerView.classList.contains("active")&&!loginView.classList.contains("active"))setView("register");return}document.body.classList.add("app-mode");accessCard.style.display="none";navActions.innerHTML=`<button class="btn btn-soft" id="topProfileBtn" type="button">${escapeHtml(currentProfile.nick)}</button>${currentProfile.is_admin?'<a class="btn btn-soft" href="admin.html">Админка</a>':''}<button class="btn btn-primary" id="topLogoutBtn" type="button">Выйти</button>`;safeOn("#topProfileBtn","click",openProfileModal);safeOn("#topLogoutBtn","click",logout);setView("promo");$("#profileNick").textContent=currentProfile.nick;$("#profileUid").textContent=formatUid(currentProfile);renderAccessState(currentProfile)}
+    async function renderSession(){currentProfile=await fetchProfile();if(!currentProfile){document.body.classList.remove("app-mode");promoView.classList.remove("access-visible");accessCard.style.display="block";navActions.innerHTML=`<button class="btn btn-soft" id="navLoginLive" type="button">Войти</button><button class="btn btn-primary" id="navRegisterLive" type="button">Регистрация</button>`;safeOn("#navLoginLive","click",()=>setView("login"));safeOn("#navRegisterLive","click",()=>setView("register"));promoCodeEl.textContent="Тут появится промокод...";promoCodeEl.classList.add("empty");if(!registerView.classList.contains("active")&&!loginView.classList.contains("active"))setView("register");return}document.body.classList.add("app-mode");accessCard.style.display="none";navActions.innerHTML=`<button class="btn btn-soft" id="topProfileBtn" type="button">Профиль</button>${currentProfile.is_admin?'<a class="btn btn-soft" href="admin.html">Админка</a>':''}<button class="btn btn-primary" id="topLogoutBtn" type="button">Выйти</button>`;safeOn("#topProfileBtn","click",openProfileModal);safeOn("#topLogoutBtn","click",logout);setView("promo");$("#profileNick").textContent=currentProfile.nick;$("#profileUid").textContent=formatUid(currentProfile);promoView.classList.toggle("access-visible", Boolean(currentProfile.active));renderAccessState(currentProfile)}
     async function logout(){await db.auth.signOut();currentProfile=null;document.body.classList.remove("app-mode");await renderSession();setView("register");showToast("Вы вышли из аккаунта")}
     function escapeHtml(value){return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
     safeOn("#navLoginBtn","click",()=>setView("login"));safeOn("#navRegisterBtn","click",()=>setView("register"));safeOn("#accessLoginBtn","click",()=>setView("login"));safeOn("#switchToLogin","click",()=>setView("login"));safeOn("#switchToRegister","click",()=>setView("register"));safeOn("#profileMiniBtn","click",openProfileModal);safeOn("#profileModalClose","click",closeProfileModal);profileModal.addEventListener("click",(event)=>{if(event.target===profileModal)closeProfileModal()});document.addEventListener("keydown",(event)=>{if(event.key==="Escape")closeProfileModal()});
