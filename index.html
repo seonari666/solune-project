@@ -267,8 +267,8 @@
     }
 
     body.app-mode .telegram-line span {
-      border-bottom: 1px solid rgba(247, 251, 255, 0.30);
-      padding-bottom: 2px;
+      border-bottom: 0;
+      padding-bottom: 0;
     }
 
     body.app-mode .telegram-line svg {
@@ -397,6 +397,58 @@
           "product"
           "code"
           "actions";
+      }
+    }
+
+  
+    /* SOLUNE final telegram/profile fix */
+    body.app-mode .telegram-line {
+      position: fixed;
+      left: 50%;
+      bottom: 34px;
+      transform: translateX(-50%);
+      z-index: 70;
+      width: auto;
+      margin: 0;
+      padding-left: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #f7fbff;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+      opacity: 1;
+      text-decoration: none;
+    }
+
+    body.app-mode .telegram-line span {
+      border-bottom: 0 !important;
+      padding-bottom: 0 !important;
+      text-decoration: none !important;
+    }
+
+    body.app-mode .telegram-line svg {
+      width: 20px;
+      height: 20px;
+      color: #f7fbff;
+      fill: currentColor;
+      filter: drop-shadow(0 0 12px rgba(247, 251, 255, 0.20));
+    }
+
+    body.app-mode .page {
+      padding-bottom: 110px;
+    }
+
+    @media (max-width: 980px) {
+      body.app-mode .telegram-line {
+        bottom: 22px;
+      }
+
+      body.app-mode .page {
+        padding-bottom: 92px;
       }
     }
 
