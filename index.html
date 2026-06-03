@@ -452,6 +452,63 @@
       }
     }
 
+  
+    /* SOLUNE final status and telegram position fix */
+    body.app-mode .access-status {
+      min-height: 126px;
+      gap: 12px;
+    }
+
+    body.app-mode .access-status .status-top {
+      align-items: center;
+    }
+
+    body.app-mode .access-status .usage {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+      align-items: start;
+    }
+
+    body.app-mode .access-status #usesText {
+      display: block;
+      white-space: nowrap;
+      line-height: 1.25;
+    }
+
+    body.app-mode .access-status #cooldownText {
+      display: block;
+      width: 100%;
+      text-align: left;
+      white-space: nowrap;
+      color: var(--muted-soft);
+      line-height: 1.25;
+      margin-left: 0;
+    }
+
+    body.app-mode .access-status .bar {
+      margin-top: 0;
+    }
+
+    body.app-mode .telegram-line {
+      bottom: 8px !important;
+    }
+
+    body.app-mode .page {
+      padding-bottom: 150px !important;
+    }
+
+    @media (max-width: 980px) {
+      body.app-mode .access-status #usesText,
+      body.app-mode .access-status #cooldownText {
+        white-space: normal;
+      }
+
+      body.app-mode .telegram-line {
+        bottom: 8px !important;
+      }
+    }
+
   </style>
 </head>
 <body>
