@@ -741,6 +741,42 @@
       }
     }
 
+  
+    /* SOLUNE guest access/login polish */
+    body:not(.app-mode) .panel {
+      min-height: auto !important;
+    }
+
+    body:not(.app-mode) .panel:has(#loginView.active) {
+      padding-bottom: 25px !important;
+    }
+
+    body:not(.app-mode) #loginView .switch:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    body:not(.app-mode) .access {
+      min-height: 124px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-content: space-between;
+    }
+
+    body:not(.app-mode) .access p {
+      display: none !important;
+    }
+
+    body:not(.app-mode) .access-buttons {
+      display: flex !important;
+      justify-content: flex-end !important;
+      margin-top: 18px !important;
+    }
+
+    body:not(.app-mode) .access-buttons .btn {
+      width: 148px;
+    }
+
   </style>
 </head>
 <body>
