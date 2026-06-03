@@ -320,6 +320,86 @@
       }
     }
 
+  
+    /* SOLUNE final polish: telegram center, profile card spacing */
+    body.app-mode .promo-view.active,
+    body.app-mode .promo-view:not(.access-visible) {
+      grid-template-areas:
+        "profile code"
+        "product code"
+        "status code"
+        ". actions";
+      gap: 12px 18px;
+    }
+
+    body.app-mode .promo-view:not(.access-visible) {
+      grid-template-areas:
+        "profile code"
+        "product code"
+        ". code"
+        ". actions";
+    }
+
+    body.app-mode .profile-mini {
+      min-height: 102px;
+      padding: 16px;
+      grid-template-columns: 58px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    body.app-mode .profile-mini .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+    }
+
+    body.app-mode .profile-mini .user-icon {
+      width: 27px;
+      height: 27px;
+    }
+
+    body.app-mode .profile-mini strong {
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    body.app-mode .profile-mini span {
+      font-size: 13px;
+    }
+
+    body.app-mode .telegram-line {
+      width: min(1120px, 100%);
+      margin: 22px auto 0;
+      padding-left: 0;
+      justify-content: center;
+      text-align: center;
+    }
+
+    body.app-mode .telegram-line span {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    @media (max-width: 980px) {
+      body.app-mode .promo-view.active {
+        grid-template-areas:
+          "profile"
+          "product"
+          "status"
+          "code"
+          "actions";
+      }
+
+      body.app-mode .promo-view:not(.access-visible) {
+        grid-template-areas:
+          "profile"
+          "product"
+          "code"
+          "actions";
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -399,7 +479,7 @@
 
   <div class="modal" id="profileModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
-      <div class="modal-head"><div><h3 id="profileModalTitle">Профиль</h3><p>Данные аккаунта SOLUNE PROJECT</p></div><button class="modal-close" id="profileModalClose" type="button">×</button></div>
+      <div class="modal-head"><div><h3 id="profileModalTitle">Профиль</h3><p>Данные вашего аккаунта</p></div><button class="modal-close" id="profileModalClose" type="button">×</button></div>
       <div class="modal-user"><div class="avatar" aria-hidden="true"><svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="8" r="4"></circle></svg></div><div><strong id="modalNick">Ник</strong><span id="modalUid">UID-0001</span></div></div>
       <div class="modal-list"><div class="profile-row"><span>Telegram</span><b id="modalTg">—</b></div><div class="profile-row"><span>Standoff ID</span><b id="modalStandoff">—</b></div><div class="profile-row"><span>Статус</span><b id="modalAccess">—</b></div><div class="profile-row"><span>Подборы</span><b id="modalUses">—</b></div></div>
     </div>
