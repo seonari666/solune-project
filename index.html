@@ -694,6 +694,53 @@
       }
     }
 
+  
+    /* SOLUNE guest page polish */
+    body:not(.app-mode) .hero {
+      transform: translateY(-34px);
+      align-items: center !important;
+    }
+
+    body:not(.app-mode) .panel {
+      transition: min-height .18s ease, padding .18s ease;
+    }
+
+    body:not(.app-mode) .form {
+      gap: 13px;
+    }
+
+    body:not(.app-mode) .message {
+      display: none !important;
+      min-height: 0 !important;
+      height: auto !important;
+      opacity: 1 !important;
+      padding: 11px 12px !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      border-color: rgba(255,125,125,.18) !important;
+      background: rgba(255,125,125,.10) !important;
+    }
+
+    body:not(.app-mode) .message.show {
+      display: block !important;
+    }
+
+    body:not(.app-mode) .message.show.good {
+      border-color: rgba(91,224,161,.18) !important;
+      background: rgba(91,224,161,.10) !important;
+    }
+
+    body:not(.app-mode) .form .btn[type="submit"] {
+      margin-top: 0;
+    }
+
+    @media (max-width: 980px) {
+      body:not(.app-mode) .hero {
+        transform: none;
+        padding-top: 18px !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -724,7 +771,7 @@
       </section>
 
       <section class="panel">
-        <div class="panel-head"><div><h2 id="panelTitle">Регистрация</h2><p class="sub" id="panelSubtitle">Создайте аккаунт для доступа к подбору.</p></div></div>
+        <div class="panel-head"><div><h2 id="panelTitle">Регистрация</h2><p class="sub" id="panelSubtitle">Создайте аккаунт для доступа к нашим продуктам.</p></div></div>
 
         <div class="view active" id="registerView">
           <form class="form" id="registerForm" novalidate>
@@ -802,7 +849,7 @@
     function clearMessages(){registerMessage.className="message";registerMessage.textContent="";loginMessage.className="message";loginMessage.textContent=""}
     function humanAuthError(error){const msg=(error?.message||"").toLowerCase();if(msg.includes("email signups are disabled"))return"Регистрация отключена в Supabase: включите Email provider и Signups.";if(msg.includes("user already registered"))return"Такой аккаунт уже существует.";if(msg.includes("invalid email"))return"Supabase отклонил технический email. Обновите файл сайта.";if(msg.includes("database error"))return"Ошибка базы данных. Проверьте SQL-схему и уникальность ника/Telegram.";if(msg.includes("password"))return"Пароль должен быть минимум 6 символов.";return error?.message||"Неизвестная ошибка."}
     function formatCooldown(value){if(!value)return"";const ms=new Date(value).getTime()-Date.now();if(ms<=0)return"доступно";const totalMinutes=Math.ceil(ms/60000);const hours=Math.floor(totalMinutes/60);const minutes=totalMinutes%60;if(hours<=0)return minutes+" мин";return hours+" ч "+minutes+" мин"}
-    function setView(name){clearMessages();registerView.classList.toggle("active",name==="register");loginView.classList.toggle("active",name==="login");promoView.classList.toggle("active",name==="promo");if(name==="register"){panelTitle.textContent="Регистрация";panelSubtitle.textContent="Создайте аккаунт для доступа к подбору."}if(name==="login"){panelTitle.textContent="Вход";panelSubtitle.textContent="Введите данные аккаунта."}if(name==="promo"){panelTitle.textContent="Подбор промокодов";panelSubtitle.textContent="Активируйте код продукта и используйте наш продукт."}}
+    function setView(name){clearMessages();registerView.classList.toggle("active",name==="register");loginView.classList.toggle("active",name==="login");promoView.classList.toggle("active",name==="promo");if(name==="register"){panelTitle.textContent="Регистрация";panelSubtitle.textContent="Создайте аккаунт для доступа к нашим продуктам."}if(name==="login"){panelTitle.textContent="Вход";panelSubtitle.textContent="Введите данные аккаунта."}if(name==="promo"){panelTitle.textContent="Подбор промокодов";panelSubtitle.textContent="Активируйте код продукта и используйте наш продукт."}}
     async function fetchProfile(){const{data:sessionData}=await db.auth.getSession();const session=sessionData.session;if(!session)return null;const{data,error}=await db.from("profiles").select("*").eq("id",session.user.id).single();if(error){await db.auth.signOut();return null}return data}
     function getAccessText(profile){if(!profile?.active)return"Не активирован";if(profile.cooldown_until&&new Date(profile.cooldown_until).getTime()>Date.now())return"Лимит закончился";if((profile.remaining_uses||0)>0)return"Доступ активен";return"Требуется код"}
     function renderAccessState(profile){const remaining=Math.max(0,profile.remaining_uses||0),limit=profile.limit_total||DAILY_LIMIT,percent=Math.max(0,Math.min(100,remaining/limit*100)),cooldown=profile.cooldown_until,isCooldown=cooldown&&new Date(cooldown).getTime()>Date.now(),isActive=profile.active&&remaining>0&&!isCooldown;usesText.textContent="Доступно подборов: "+remaining+" / "+limit;barFill.style.width=percent+"%";if(!profile.active){accessBadge.textContent="Не активирован";accessBadge.className="status-badge";cooldownText.textContent="";productHelp.textContent="";return}if(isCooldown){accessBadge.textContent="Лимит закончился";accessBadge.className="status-badge warn";cooldownText.textContent="обновление через "+formatCooldown(cooldown);productHelp.textContent="";return}if(isActive){accessBadge.textContent="Доступ активен";accessBadge.className="status-badge active";cooldownText.textContent="";productHelp.textContent="";return}accessBadge.textContent="Требуется код";accessBadge.className="status-badge warn";cooldownText.textContent="";productHelp.textContent="Введите новый код продукта, чтобы продолжить."}
