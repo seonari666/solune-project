@@ -80,7 +80,7 @@
               <input id="codeInput" autocomplete="off" placeholder="">
               <button class="btn btn-primary" id="createCodeBtn" type="button">Создать</button>
             </div>
-            <p>Оставь поле пустым — код сгенерируется автоматически. Каждый код даёт 5 подборов.</p>
+            
           </div>
 
           <div class="card">
@@ -259,8 +259,12 @@
     }
 
     $("#createCodeBtn").addEventListener("click", async () => {
-      let code = normalizeCode($("#codeInput").value);
-      if (!code) code = generateCode();
+      const code = normalizeCode($("#codeInput").value);
+
+      if (!code) {
+        showToast("Введите код");
+        return;
+      }
 
       const { error } = await db.from("product_codes").insert({
         code,
